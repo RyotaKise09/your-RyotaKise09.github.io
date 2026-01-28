@@ -1,0 +1,325 @@
+body {
+    font-family: Georgia, serif;
+    background: #865833;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    color: #a5623c;
+}
+
+.invitation-box {
+    max-width: 600px;
+    background: white;
+    padding: 40px 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+p {
+    font-size: 17px;
+    color: #a5623c;
+}
+
+.small-text {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.date {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+.rsvp-btn {
+    background: #865833;
+    color: white;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+}
+
+/* POPUP */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-box {
+    background: white;
+    padding: 30px;
+    width: 450px;
+    border-radius: 10px;
+    text-align: left;
+    color: #865833;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.popup-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cancel-btn {
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background: #865833;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.count {
+    font-weight: bold;
+    margin: 10px 0;
+}
+.suggestions-box {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    display: none;
+    position: relative;
+    z-index: 10;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #eee;
+}
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.confirm-box {
+    background: white;
+    padding: 35px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0px 6px 25px rgba(0,0,0,0.1);
+}
+
+.confirm-box h1 {
+    margin-bottom: 10px;
+}
+
+#guestName {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #8a6d3b;
+    margin: 15px 0;
+}
+
+.details {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.home-btn {
+    background: #b08d57;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.home-btn:hover {
+    background: #9a774b;
+}
+.guest-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    margin: 12px 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Guest Name */
+.guest-name {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Right-side buttons */
+.guest-right {
+    display: flex;
+    gap: 10px;
+}
+
+/* Button base */
+.guest-right button {
+    padding: 8px 16px;
+    border-radius: 25px;
+    border: 2px solid #d4c2a3;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+/* ACCEPT */
+.accept-btn {
+    color: #8a6d3b;
+    border-color: #8a6d3b;
+}
+.accept-btn:hover {
+    background: #8a6d3b;
+    color: white;
+}
+.accept-btn.selected {
+    background: #8a6d3b;
+    color: white;
+    transform: scale(1.04);
+}
+
+/* DECLINE */
+.decline-btn {
+    color: #8a6d3b;
+    border-color: #8a6d3b;
+}
+.decline-btn:hover {
+    background: #8a6d3b;
+    color: white;
+}
+.decline-btn.selected {
+    background: #8a6d3b;
+    color: white;
+    transform: scale(1.04);
+}
+/* CONTINUE BUTTON */
+.continue-btn {
+    width: 100%;
+    padding: 14px 0;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #c9a77e, #a57c52);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 14px rgba(165, 124, 82, 0.3);
+    transition: 0.3s ease;
+}
+
+/* DISABLED STATE */
+.continue-btn:disabled {
+    background: #ddd;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* HOVER EFFECT */
+.continue-btn:not(:disabled):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(165, 124, 82, 0.45);
+}
+
+/* CLICK EFFECT */
+.continue-btn:not(:disabled):active {
+    transform: scale(0.97);
+}
+#guestListConfirmed {
+    text-align: left;
+}
+.confirmed-name {
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 5px 30px;
+}
+.seat-number {
+    font-weight: bold;
+}
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.invitation-box h1 {
+    margin-top: 0;
+}
+
+.logo {
+    margin-bottom: 5px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
+    max-width: 200px;
+    height: auto;
+}
+
+.overlay {
+  display: none;            /* IMPORTANT */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.rsvp-btn {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}

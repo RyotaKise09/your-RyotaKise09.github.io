@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Invitation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="invitation-box">
+
+    <!-- LOGO -->
+    <div class="logo-container">
+        <img src="ja.png" alt="Wedding Logo" class="logo">
+    </div>
+
+    <h1>We Reserved Seats for You!</h1>
+
+    <p>
+        We have chosen to have a small and intimate wedding ceremony,
+        and only those who are closest to us will be in attendance.
+    </p>
+
+    <p class="small-text">
+        The favor of your reply is requested.
+    </p>
+
+    <div class="date">July. 11, 2026</div>
+
+    <button class="rsvp-btn" onclick="openPopup()">RSVP NOW</button>
+</div>
+
+
+<!-- POPUP OVERLAY -->
+<div id="popupOverlay" class="overlay">
+    <div class="popup-box">
+
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+
+        <p>
+            Please search for your name to <strong>confirm your RSVP.</strong><br>
+            If you cannot find your name, please contact us directly.
+        </p>
+
+        <!-- SEARCH -->
+        <label>Search Name</label>
+        <input type="text" id="searchName" placeholder="Enter your name">
+        <div id="suggestions" class="suggestions-box"></div>
+
+        <!-- FIXED: unified ID -->
+        <p id="reservedSeatsText" class="reserved-seats"></p>
+
+        <!-- GUEST LIST AREA -->
+        <div id="guestList" class="guest-list"></div>
+
+        <!-- CONTINUE BUTTON -->
+        <button id="continueBtn" class="continue-btn" disabled>CONTINUE</button>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
