@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Confirmation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="confirm-box">
+    <h1>Thank You for Your RSVP!</h1>
+
+    <p class="details">
+        Your response has been recorded.  
+        Below are the guests you confirmed:
+    </p>
+
+    <div id="guestListConfirmed"></div>
+
+    <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
+</div>
+
+<script>
+    // Get all accepted guests from URL
+    const params = new URLSearchParams(window.location.search);
+    const guests = JSON.parse(params.get("guests") || "[]");
+
+    const container = document.getElementById("guestListConfirmed");
+
+    if (guests.length === 0) {
+        container.innerHTML = "<p>No guests were accepted.</p>";
+    } else {
+        guests.forEach(name => {
+            const div = document.createElement("p");
+            div.className = "confirmed-name";
+            div.textContent = "✔ " + name;
+            container.appendChild(div);
+        });
+    }
+
+    function goHome() {
+        window.location.href = "Wedding.html";
+    }
+</script>
+
+</body>
+</html>
