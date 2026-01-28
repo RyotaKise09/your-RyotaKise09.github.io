@@ -473,7 +473,7 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 });
 
 function sendToGoogleSheets(groupName, acceptedGuests, seats) {
-  fetch("https://script.google.com/macros/s/AKfycbxVJSclNirXHmX18dcbjElsut_MTan08lPDBMG8unhBVAj0bO1cE6ngIOe7Vi8ZMy_5eA/exec", {
+  fetch(https://script.google.com/macros/s/AKfycbxVJSclNirXHmX18dcbjElsut_MTan08lPDBMG8unhBVAj0bO1cE6ngIOe7Vi8ZMy_5eA/exec, {
     method: "POST",
     body: JSON.stringify({
       groupName: groupName,
@@ -509,3 +509,4 @@ continueBtn.addEventListener("click", () => {
 
   window.location.href = "confirmation.html";
 });
+
