@@ -472,41 +472,6 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 
 });
 
-function sendToGoogleSheets(groupName, acceptedGuests, seats) {
-  fetch(https://script.google.com/macros/s/AKfycbxVJSclNirXHmX18dcbjElsut_MTan08lPDBMG8unhBVAj0bO1cE6ngIOe7Vi8ZMy_5eA/exec, {
-    method: "POST",
-    body: JSON.stringify({
-      groupName: groupName,
-      rsvp: acceptedGuests.length > 0 ? "Yes" : "No",
-      acceptedGuests: acceptedGuests,
-      seats: seats
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.json())
-  .then(data => console.log("Saved", data))
-  .catch(err => console.error("Error", err));
-}
 
-continueBtn.addEventListener("click", () => {
-  const rows = document.querySelectorAll(".guest-row");
-  const acceptedGuests = [];
 
-  rows.forEach(row => {
-    if (row.querySelector(".accept-btn").classList.contains("selected")) {
-      acceptedGuests.push(
-        row.querySelector(".guest-name").textContent
-      );
-    }
-  });
-
-  const groupName = document.getElementById("searchName").value.trim();
-  const seats = acceptedGuests.length;
-
-  sendToGoogleSheets(groupName, acceptedGuests, seats);
-
-  window.location.href = "confirmation.html";
-});
 
