@@ -429,44 +429,43 @@ function declineGuest(btn) {
 
 
 // ------------------ CHECK ALL ANSWERED -------------------
-function checkAllAnswered() {
-    const rows = guestListContainer.querySelectorAll(".guest-row");
-    let allAnswered = true;
+continueBtn.addEventListener("click", () => {
+  const rows = guestListContainer.querySelectorAll(".guest-row");
 
-    continueBtn.addEventListener("click", () => {
-    const rows = guestListContainer.querySelectorAll(".guest-row");
+  let guests = [];
+  let acceptedCount = 0;
 
-    let acceptedGuests = [];
+  rows.forEach(row => {
+    const name = row.querySelector(".guest-name").textContent;
+    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
 
-    rows.forEach(row => {
-        const name = row.querySelector(".guest-name").textContent;
-        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+    if (accepted) acceptedCount++;
 
-        if (accepted) {
-            acceptedGuests.push(name);
-        }
+    guests.push({
+      name,
+      accepted
     });
+  });
 
-    // Redirect with accepted guests encoded in URL
-    const params = new URLSearchParams();
-    params.set("guests", JSON.stringify(acceptedGuests));
+  const groupName = searchInput.value.trim();
 
-    window.location.href = "confirmation.html?" + params.toString();
+  const payload = {
+    groupName,
+    seats: acceptedCount,
+    guests
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbxkcrScNk1dpYHglPGEkhmn9rCT2VJ70nvcetzPH8VHpiWTlHoOPD6krhA0NX2TXgfW/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  // Redirect after submit
+  window.location.href = "confirmation.html";
 });
 
 
-    rows.forEach(row => {
-        const acc = row.querySelector(".accept-btn").classList.contains("selected");
-        const dec = row.querySelector(".decline-btn").classList.contains("selected");
-        if (!acc && !dec) allAnswered = false;
-    });
-
-    continueBtn.disabled = !allAnswered;
-}
-document.getElementById("continueBtn").addEventListener("click", () => {
-    const selectedName = document.getElementById("searchName").value.trim();
-    if (selectedName.length > 0) {
-        // Redirect with name as URL parameter
-        window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
-    }
-});
