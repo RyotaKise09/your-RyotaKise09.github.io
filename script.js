@@ -497,18 +497,19 @@ continueBtn.addEventListener("click", () => {
     guests
   };
 
-  fetch("YOUR_WEB_APP_URL_HERE", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+ fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {  // Replace with your actual URL
+  method: "POST",
+  mode: "no-cors",  // Keep this for cross-origin requests
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
   // Redirect after submit
   window.location.href = "confirmation.html";
 });
+
 
 
 
