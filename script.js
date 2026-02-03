@@ -430,51 +430,46 @@ function declineGuest(btn) {
 
 // ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
-  const rows = guestListContainer.querySelectorAll(".guest-row");
-  let allAnswered = true;
+    const rows = guestListContainer.querySelectorAll(".guest-row");
+    let allAnswered = true;
 
-  let guests = [];
-  let acceptedGuests = [];
-  let acceptedCount = 0;
+    continueBtn.addEventListener("click", () => {
+    const rows = guestListContainer.querySelectorAll(".guest-row");
 
-  rows.forEach(row => {
-    const name = row.querySelector(".guest-name").textContent;
-    const acc = row.querySelector(".accept-btn").classList.contains("selected");
-    const dec = row.querySelector(".decline-btn").classList.contains("selected");
+    let acceptedGuests = [];
 
-    if (!acc && !dec) allAnswered = false;
+    rows.forEach(row => {
+        const name = row.querySelector(".guest-name").textContent;
+        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
 
-    if (acc || dec) {
-      guests.push({ name, accepted: acc });
-      if (acc) {
-        acceptedGuests.push(name);
-        acceptedCount++;
-      }
-    }
-  });
-
-  // 🚀 AUTO SUBMIT + REDIRECT
-  if (allAnswered && rows.length > 0) {
-    const payload = {
-      groupName: searchInput.value.trim(),
-      seats: acceptedCount,
-      guests
-    };
-
-    fetch("YOUR_WEB_APP_URL_HERE", {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+        if (accepted) {
+            acceptedGuests.push(name);
+        }
     });
 
+    // Redirect with accepted guests encoded in URL
     const params = new URLSearchParams();
     params.set("guests", JSON.stringify(acceptedGuests));
 
     window.location.href = "confirmation.html?" + params.toString();
-  }
-}
+});
 
+
+    rows.forEach(row => {
+        const acc = row.querySelector(".accept-btn").classList.contains("selected");
+        const dec = row.querySelector(".decline-btn").classList.contains("selected");
+        if (!acc && !dec) allAnswered = false;
+    });
+
+    continueBtn.disabled = !allAnswered;
+}
+document.getElementById("continueBtn").addEventListener("click", () => {
+    const selectedName = document.getElementById("searchName").value.trim();
+    if (selectedName.length > 0) {
+        // Redirect with name as URL parameter
+        window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
+    }
+});
 
 
 
