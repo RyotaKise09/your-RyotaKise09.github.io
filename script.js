@@ -433,18 +433,19 @@ continueBtn.addEventListener("click", () => {
   const rows = guestListContainer.querySelectorAll(".guest-row");
 
   let guests = [];
+  let acceptedGuests = [];
   let acceptedCount = 0;
 
   rows.forEach(row => {
     const name = row.querySelector(".guest-name").textContent;
     const accepted = row.querySelector(".accept-btn").classList.contains("selected");
 
-    if (accepted) acceptedCount++;
+    guests.push({ name, accepted });
 
-    guests.push({
-      name,
-      accepted
-    });
+    if (accepted) {
+      acceptedGuests.push(name);
+      acceptedCount++;
+    }
   });
 
   const groupName = searchInput.value.trim();
@@ -455,6 +456,7 @@ continueBtn.addEventListener("click", () => {
     guests
   };
 
+  // 🔹 SEND TO GOOGLE SHEETS
   fetch("https://script.google.com/macros/s/AKfycbxkcrScNk1dpYHglPGEkhmn9rCT2VJ70nvcetzPH8VHpiWTlHoOPD6krhA0NX2TXgfW/exec", {
     method: "POST",
     mode: "no-cors",
@@ -464,8 +466,12 @@ continueBtn.addEventListener("click", () => {
     body: JSON.stringify(payload)
   });
 
-  // Redirect after submit
-  window.location.href = "confirmation.html";
+  // 🔹 REDIRECT WITH ACCEPTED GUESTS
+  const params = new URLSearchParams();
+  params.set("guests", JSON.stringify(acceptedGuests));
+
+  window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
