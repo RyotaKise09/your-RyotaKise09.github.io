@@ -246,7 +246,41 @@ p {
     color: white;
     transform: scale(1.04);
 }
+/* CONTINUE BUTTON */
+.continue-btn {
+    width: 100%;
+    padding: 14px 0;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #c9a77e, #a57c52);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 14px rgba(165, 124, 82, 0.3);
+    transition: 0.3s ease;
+}
 
+/* DISABLED STATE */
+.continue-btn:disabled {
+    background: #ddd;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* HOVER EFFECT */
+.continue-btn:not(:disabled):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(165, 124, 82, 0.45);
+}
+
+/* CLICK EFFECT */
+.continue-btn:not(:disabled):active {
+    transform: scale(0.97);
+}
 #guestListConfirmed {
     text-align: left;
 }
@@ -289,8 +323,3 @@ p {
   z-index: 1;
   cursor: pointer;
 }
-
-
-
-
-
