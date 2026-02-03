@@ -430,6 +430,8 @@ function declineGuest(btn) {
 
 // ------------------ CHECK ALL ANSWERED -------------------
 continueBtn.addEventListener("click", () => {
+  if (continueBtn.disabled) return;
+
   const rows = guestListContainer.querySelectorAll(".guest-row");
 
   let guests = [];
@@ -456,8 +458,8 @@ continueBtn.addEventListener("click", () => {
     guests
   };
 
-  // 🔹 SEND TO GOOGLE SHEETS
-  fetch("https://script.google.com/macros/s/AKfycbxkcrScNk1dpYHglPGEkhmn9rCT2VJ70nvcetzPH8VHpiWTlHoOPD6krhA0NX2TXgfW/exec", {
+  // Send to Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbxsNd7KWCktork1mhzALo_seDxFwmZYman61eKjljAwGexH_FCeWv6_hJoSf67cOfQO/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -466,12 +468,13 @@ continueBtn.addEventListener("click", () => {
     body: JSON.stringify(payload)
   });
 
-  // 🔹 REDIRECT WITH ACCEPTED GUESTS
+  // Redirect with accepted guests
   const params = new URLSearchParams();
   params.set("guests", JSON.stringify(acceptedGuests));
-
   window.location.href = "confirmation.html?" + params.toString();
 });
+
+
 
 
 
