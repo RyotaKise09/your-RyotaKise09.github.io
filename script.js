@@ -474,13 +474,6 @@ continueBtn.addEventListener("click", () => {
   window.location.href = "confirmation.html?" + params.toString();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("continueBtn");
-
-  btn.addEventListener("click", () => {
-    alert("CLICK WORKS");
-  });
-});
 
 
 
