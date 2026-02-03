@@ -269,7 +269,7 @@ guestList.forEach(entry => {
 const searchInput = document.getElementById("searchName");
 const suggestionsBox = document.getElementById("suggestions");
 const guestListContainer = document.getElementById("guestList");
-const continueBtn = document.getElementById("continueBtn");
+
 
 // OPEN / CLOSE POPUP
 function openPopup() {
@@ -429,10 +429,9 @@ function declineGuest(btn) {
 
 
 // ------------------ CHECK ALL ANSWERED -------------------
-continueBtn.addEventListener("click", () => {
-  if (continueBtn.disabled) return;
-
+function checkAllAnswered() {
   const rows = guestListContainer.querySelectorAll(".guest-row");
+  let allAnswered = true;
 
   let guests = [];
   let acceptedGuests = [];
@@ -440,40 +439,41 @@ continueBtn.addEventListener("click", () => {
 
   rows.forEach(row => {
     const name = row.querySelector(".guest-name").textContent;
-    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+    const acc = row.querySelector(".accept-btn").classList.contains("selected");
+    const dec = row.querySelector(".decline-btn").classList.contains("selected");
 
-    guests.push({ name, accepted });
+    if (!acc && !dec) allAnswered = false;
 
-    if (accepted) {
-      acceptedGuests.push(name);
-      acceptedCount++;
+    if (acc || dec) {
+      guests.push({ name, accepted: acc });
+      if (acc) {
+        acceptedGuests.push(name);
+        acceptedCount++;
+      }
     }
   });
 
-  const groupName = searchInput.value.trim();
+  // 🚀 AUTO SUBMIT + REDIRECT
+  if (allAnswered && rows.length > 0) {
+    const payload = {
+      groupName: searchInput.value.trim(),
+      seats: acceptedCount,
+      guests
+    };
 
-  const payload = {
-    groupName,
-    seats: acceptedCount,
-    guests
-  };
+    fetch("YOUR_WEB_APP_URL_HERE", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  // Send to Google Sheets
-  fetch("https://script.google.com/macros/s/AKfycbxsNd7KWCktork1mhzALo_seDxFwmZYman61eKjljAwGexH_FCeWv6_hJoSf67cOfQO/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+    const params = new URLSearchParams();
+    params.set("guests", JSON.stringify(acceptedGuests));
 
-  // Redirect with accepted guests
-  const params = new URLSearchParams();
-  params.set("guests", JSON.stringify(acceptedGuests));
-  window.location.href = "confirmation.html?" + params.toString();
-});
-
+    window.location.href = "confirmation.html?" + params.toString();
+  }
+}
 
 
 
