@@ -471,6 +471,46 @@ document.getElementById("continueBtn").addEventListener("click", () => {
     }
 });
 
+continueBtn.addEventListener("click", () => {
+  const rows = guestListContainer.querySelectorAll(".guest-row");
+
+  let guests = [];
+  let acceptedCount = 0;
+
+  rows.forEach(row => {
+    const name = row.querySelector(".guest-name").textContent;
+    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+
+    if (accepted) acceptedCount++;
+
+    guests.push({
+      name,
+      accepted
+    });
+  });
+
+  const groupName = searchInput.value.trim();
+
+  const payload = {
+    groupName,
+    seats: acceptedCount,
+    guests
+  };
+
+  fetch("YOUR_WEB_APP_URL_HERE", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  // Redirect after submit
+  window.location.href = "confirmation.html";
+});
+
+
 
 
 
