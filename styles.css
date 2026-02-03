@@ -324,8 +324,9 @@ p {
   cursor: pointer;
 }
 
-#popupOverlay {
+.popupOverlay {
   display: none !important;
 }
+
 
 
