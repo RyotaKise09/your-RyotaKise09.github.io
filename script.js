@@ -469,9 +469,4 @@ document.getElementById("continueBtn").addEventListener("click", () => {
         // Redirect with name as URL parameter
         window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
     }
-
 });
-
-
-
-
