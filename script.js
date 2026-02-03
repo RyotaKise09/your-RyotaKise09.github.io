@@ -430,22 +430,17 @@ function declineGuest(btn) {
 
 // ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
-    const rows = guestListContainer.querySelectorAll(".guest-row");
-    let allAnswered = true;
+  const rows = guestListContainer.querySelectorAll(".guest-row");
+  let allAnswered = true;
 
-    continueBtn.addEventListener("click", () => {
-    const rows = guestListContainer.querySelectorAll(".guest-row");
+  rows.forEach(row => {
+    const acc = row.querySelector(".accept-btn").classList.contains("selected");
+    const dec = row.querySelector(".decline-btn").classList.contains("selected");
+    if (!acc && !dec) allAnswered = false;
+  });
 
-    let acceptedGuests = [];
-
-    rows.forEach(row => {
-        const name = row.querySelector(".guest-name").textContent;
-        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
-
-        if (accepted) {
-            acceptedGuests.push(name);
-        }
-    });
+  continueBtn.disabled = !allAnswered;
+}
 
     // Redirect with accepted guests encoded in URL
     const params = new URLSearchParams();
@@ -470,3 +465,29 @@ document.getElementById("continueBtn").addEventListener("click", () => {
         window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
     }
 });
+
+continueBtn.addEventListener("click", () => {
+  const rows = document.querySelectorAll(".guest-row");
+  const acceptedGuests = [];
+
+  rows.forEach(row => {
+    if (row.querySelector(".accept-btn").classList.contains("selected")) {
+      acceptedGuests.push(
+        row.querySelector(".guest-name").textContent
+      );
+    }
+  });
+
+  const groupName = document.getElementById("searchName").value.trim();
+
+  if (!groupName) return;
+
+  // OPTIONAL: prevent double-click
+  continueBtn.disabled = true;
+
+  // Redirect
+  window.location.href =
+    "confirmation.html?name=" + encodeURIComponent(groupName) +
+    "&guests=" + encodeURIComponent(JSON.stringify(acceptedGuests));
+});
+
