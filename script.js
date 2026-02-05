@@ -467,7 +467,7 @@ continueBtn.addEventListener("click", () => {
     // Create a hidden form for submission (easiest way to POST reliably on mobile)
     const form = document.createElement("form");
     form.method = "POST";
-    form.action = "https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec";
+    form.action = "https://script.google.com/macros/s/AKfycbzfxPfPg1UPDV3R13A8fjtcucHVeBcj88v-b88DDAKHet0SpIxDNItYYj6JoLZD7-Kf/exec";
     form.style.display = "none";  // Hide it
 
     // Add the data as a hidden input
@@ -486,6 +486,7 @@ continueBtn.addEventListener("click", () => {
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
