@@ -24,20 +24,21 @@
 
 <script>
     // Get all accepted guests from URL
-    const params = new URLSearchParams(window.location.search);
-    const guests = JSON.parse(params.get("guests") || "[]");
+   // On page load, parse URL params and display accepted guests
+window.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const acceptedGuests = JSON.parse(urlParams.get("guests") || "[]");
 
-    const container = document.getElementById("guestListConfirmed");
-
-    if (guests.length === 0) {
-        container.innerHTML = "<p>No guests were accepted.</p>";
+    if (acceptedGuests.length > 0) {
+        // Display the list (customize this based on your HTML)
+        const displayEl = document.getElementById("acceptedGuestsDisplay");  // Add an element like <div id="acceptedGuestsDisplay"></div>
+        displayEl.innerHTML = `<h2>Accepted Guests:</h2><ul>${acceptedGuests.map(name => `<li>${name}</li>`).join("")}</ul>`;
     } else {
-        guests.forEach(name => {
-            const div = document.createElement("p");
-            div.className = "confirmed-name";
-            div.textContent = "✔ " + name;
-            container.appendChild(div);
-        });
+        // Fallback message
+        const displayEl = document.getElementById("acceptedGuestsDisplay");
+        displayEl.innerHTML = "<p>No guests were accepted.</p>";
+    }
+});
     }
 
     function goHome() {
@@ -47,4 +48,5 @@
 
 </body>
 </html>
+
 
