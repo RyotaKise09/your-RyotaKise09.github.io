@@ -431,21 +431,16 @@ function declineGuest(btn) {
 // ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
     const rows = guestListContainer.querySelectorAll(".guest-row");
-    let allAnswered = true;
-
-    continueBtn.addEventListener("click", () => {
-    const rows = guestListContainer.querySelectorAll(".guest-row");
-
-    let acceptedGuests = [];
-
-    rows.forEach(row => {
-        const name = row.querySelector(".guest-name").textContent;
-        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
-
-        if (accepted) {
-            acceptedGuests.push(name);
+    for (const row of rows) {
+        const acceptBtn = row.querySelector(".accept-btn");
+        const declineBtn = row.querySelector(".decline-btn");
+        // Check if neither button is selected
+        if (!acceptBtn.classList.contains("selected") && !declineBtn.classList.contains("selected")) {
+            return false; // Not all have answered
         }
-    });
+    }
+    return true; // All have answered
+}
 
     // Redirect with accepted guests encoded in URL
    continueBtn.addEventListener("click", () => {
@@ -494,6 +489,7 @@ function checkAllAnswered() {
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
