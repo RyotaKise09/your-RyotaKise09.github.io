@@ -464,7 +464,7 @@ continueBtn.addEventListener("click", () => {
 
    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {
     method: "POST",
-    mode: "no-cors",
+    mode: "cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
 }).catch(err => console.error("Fetch error:", err));  // Log for debugging
@@ -475,6 +475,7 @@ params.set("guests", JSON.stringify(acceptedGuests));
 window.location.href = "confirmation.html?" + params.toString();
 
 });
+
 
 
 
