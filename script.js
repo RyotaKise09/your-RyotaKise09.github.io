@@ -429,62 +429,86 @@ function declineGuest(btn) {
 
 
 // ------------------ CHECK ALL ANSWERED -------------------
-let hasSubmitted = false;
-
 function checkAllAnswered() {
-  if (hasSubmitted) return;
+    const rows = guestListContainer.querySelectorAll(".guest-row");
+    let allAnswered = true;
 
+    continueBtn.addEventListener("click", () => {
+    const rows = guestListContainer.querySelectorAll(".guest-row");
+
+    let acceptedGuests = [];
+
+    rows.forEach(row => {
+        const name = row.querySelector(".guest-name").textContent;
+        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+
+        if (accepted) {
+            acceptedGuests.push(name);
+        }
+    });
+
+    // Redirect with accepted guests encoded in URL
+    const params = new URLSearchParams();
+    params.set("guests", JSON.stringify(acceptedGuests));
+
+    window.location.href = "confirmation.html?" + params.toString();
+});
+
+
+    rows.forEach(row => {
+        const acc = row.querySelector(".accept-btn").classList.contains("selected");
+        const dec = row.querySelector(".decline-btn").classList.contains("selected");
+        if (!acc && !dec) allAnswered = false;
+    });
+
+    continueBtn.disabled = !allAnswered;
+}
+document.getElementById("continueBtn").addEventListener("click", () => {
+    const selectedName = document.getElementById("searchName").value.trim();
+    if (selectedName.length > 0) {
+        // Redirect with name as URL parameter
+        window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
+    }
+});
+
+continueBtn.addEventListener("click", () => {
   const rows = guestListContainer.querySelectorAll(".guest-row");
-  let allAnswered = true;
 
   let guests = [];
-  let acceptedGuests = [];
   let acceptedCount = 0;
 
   rows.forEach(row => {
     const name = row.querySelector(".guest-name").textContent;
-    const acc = row.querySelector(".accept-btn").classList.contains("selected");
-    const dec = row.querySelector(".decline-btn").classList.contains("selected");
+    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
 
-    if (!acc && !dec) allAnswered = false;
+    if (accepted) acceptedCount++;
 
-    if (acc || dec) {
-      guests.push({ name, accepted: acc });
-      if (acc) {
-        acceptedGuests.push(name);
-        acceptedCount++;
-      }
-    }
+    guests.push({
+      name,
+      accepted
+    });
   });
 
-  if (!allAnswered || rows.length === 0) return;
-
-  hasSubmitted = true;
+  const groupName = searchInput.value.trim();
 
   const payload = {
-    groupName: searchInput.value.trim(),
+    groupName,
     seats: acceptedCount,
     guests
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+ fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {  // Replace with your actual URL
+  method: "POST",
+  mode: "no-cors",  // Keep this for cross-origin requests
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
-  const params = new URLSearchParams();
-  params.set("guests", JSON.stringify(acceptedGuests));
-
-  window.location.href = "confirmation.html?" + params.toString();
-}
-
-
-
-
-
-
+  // Redirect after submit
+  window.location.href = "confirmation.html";
+});
 
 
 
