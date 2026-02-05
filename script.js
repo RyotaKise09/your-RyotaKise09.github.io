@@ -269,6 +269,7 @@ guestList.forEach(entry => {
 const searchInput = document.getElementById("searchName");
 const suggestionsBox = document.getElementById("suggestions");
 const guestListContainer = document.getElementById("guestList");
+const continueBtn = document.getElementById("continueBtn");
 
 
 // OPEN / CLOSE POPUP
@@ -488,6 +489,7 @@ function checkAllAnswered() {
         // No redirect on failure
     });
 });
+
 
 
 
