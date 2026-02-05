@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Confirmation</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>RSVP Confirmation</h1>
-    <div id="acceptedGuestsDisplay">
-        <!-- This will be populated by JavaScript -->
-    </div>
 
-    <script>
-        // On page load, parse URL params and display accepted guests
-        window.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const guestsParam = urlParams.get("guests");
-            
-            let acceptedGuests = [];
-            if (guestsParam) {
-                try {
-                    acceptedGuests = JSON.parse(guestsParam);  // Parse the JSON array
-                } catch (e) {
-                    console.error("Error parsing guests param:", e);
-                }
-            }
+<div class="confirm-box">
+    <h1>Thank You for Your RSVP!</h1>
 
-            const displayEl = document.getElementById("acceptedGuestsDisplay");
-            if (acceptedGuests.length > 0) {
-                // Display the list of accepted guests
-                displayEl.innerHTML = `
-                    <h2>Accepted Guests (${acceptedGuests.length}):</h2>
-                    <ul>
-                        ${acceptedGuests.map(name => `<li>${name}</li>`).join("")}
-                    </ul>
-                `;
-            } else {
-                // Fallback if no guests accepted
-                displayEl.innerHTML = "<p>No guests were accepted.</p>";
-            }
+    <p class="details">
+        Your response has been recorded.  
+        Below are the guests you confirmed:
+    </p>
+
+    <div id="guestListConfirmed"></div>
+
+    <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
+</div>
+
+<script>
+    // Get all accepted guests from URL
+    const params = new URLSearchParams(window.location.search);
+    const guests = JSON.parse(params.get("guests") || "[]");
+
+    const container = document.getElementById("guestListConfirmed");
+
+    if (guests.length === 0) {
+        container.innerHTML = "<p>No guests were accepted.</p>";
+    } else {
+        guests.forEach(name => {
+            const div = document.createElement("p");
+            div.className = "confirmed-name";
+            div.textContent = "✔ " + name;
+            container.appendChild(div);
         });
-    </script>
+    }
+
+    function goHome() {
+        window.location.href = "Wedding.html";
+    }
+</script>
+
 </body>
 </html>
-
