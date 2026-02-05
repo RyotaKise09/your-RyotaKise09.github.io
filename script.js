@@ -443,7 +443,7 @@ function checkAllAnswered() {
 }
 
     // Redirect with accepted guests encoded in URL
-   continueBtn.addEventListener("click", () => {
+ continueBtn.addEventListener("click", () => {
     if (continueBtn.disabled) return;  // Prevent if disabled
 
     const rows = guestListContainer.querySelectorAll(".guest-row");
@@ -465,9 +465,9 @@ function checkAllAnswered() {
     const payload = { groupName, seats: acceptedCount, guests };
 
     // Submit with CORS for error visibility
-    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {  // Update with new URL
+    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {  // Update with new URL if needed
         method: "POST",
-        mode: "cors",  // Changed from no-cors
+        mode: "cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     })
@@ -477,18 +477,19 @@ function checkAllAnswered() {
     })
     .then(data => {
         console.log("Submission successful:", data);
+        // Redirect only on success
+        const params = new URLSearchParams();
+        params.set("guests", JSON.stringify(acceptedGuests));
+        window.location.href = "confirmation.html?" + params.toString();
     })
     .catch(err => {
         console.error("Submission failed:", err);
         alert("Submission failed. Check console and try again.");
-        return;  // Don't redirect if failed
+        // No redirect on failure
     });
-
-    // Redirect only after successful submission attempt
-    const params = new URLSearchParams();
-    params.set("guests", JSON.stringify(acceptedGuests));
-    window.location.href = "confirmation.html?" + params.toString();
 });
+
+
 
 
 
