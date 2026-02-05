@@ -448,27 +448,12 @@ function checkAllAnswered() {
     });
 
     // Redirect with accepted guests encoded in URL
-    const params = new URLSearchParams();
-    params.set("guests", JSON.stringify(acceptedGuests));
-
-    window.location.href = "confirmation.html?" + params.toString();
-});
-
-
-    rows.forEach(row => {
-        const acc = row.querySelector(".accept-btn").classList.contains("selected");
-        const dec = row.querySelector(".decline-btn").classList.contains("selected");
-        if (!acc && !dec) allAnswered = false;
-    });
-
-    continueBtn.disabled = !allAnswered;
-}
-continueBtn.addEventListener("click", () => {
-    if (continueBtn.disabled) return;  // Prevent action if button is disabled
+   continueBtn.addEventListener("click", () => {
+    if (continueBtn.disabled) return;  // Prevent if disabled
 
     const rows = guestListContainer.querySelectorAll(".guest-row");
     let guests = [];
-    let acceptedGuests = [];  // For URL params
+    let acceptedGuests = [];
     let acceptedCount = 0;
 
     rows.forEach(row => {
@@ -484,21 +469,31 @@ continueBtn.addEventListener("click", () => {
     const groupName = searchInput.value.trim();
     const payload = { groupName, seats: acceptedCount, guests };
 
-    // Submit to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycbw7hXT77QZHu3ui3BEr7GAyW4OC0pf7WQXs7J32jMEAwM1VZgwKxESHlBX3dTVcfF4T/exec", {
+    // Submit with CORS for error visibility
+    fetch("https://script.google.com/macros/s/YOUR_NEW_SCRIPT_ID/exec", {  // Update with new URL
         method: "POST",
-        mode: "no-cors",
+        mode: "cors",  // Changed from no-cors
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
-    }).catch(err => console.error("Fetch error:", err));  // Log errors
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return response.json();
+    })
+    .then(data => {
+        console.log("Submission successful:", data);
+    })
+    .catch(err => {
+        console.error("Submission failed:", err);
+        alert("Submission failed. Check console and try again.");
+        return;  // Don't redirect if failed
+    });
 
-    // Redirect with accepted guests in URL
+    // Redirect only after successful submission attempt
     const params = new URLSearchParams();
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
-
-
 
 
 
