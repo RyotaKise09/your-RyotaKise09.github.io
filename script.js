@@ -483,7 +483,7 @@ const groupName = searchInput.value.trim();
 const payload = { groupName, seats: acceptedCount, guests };
 
 // Submit to Google Sheets
-fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {
+fetch("https://script.google.com/macros/s/AKfycbza9c8y0V-_I_LacuKVWejyThNTZfcRKocz_Lta9tUsAYbvp5Z9X_rQxDIpS4EWszYo/exec", {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
@@ -496,3 +496,4 @@ params.set("guests", JSON.stringify(acceptedGuests));
 window.location.href = "confirmation.html?" + params.toString();
 
 });
+
