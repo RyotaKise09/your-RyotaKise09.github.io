@@ -463,6 +463,7 @@ continueBtn.disabled = !allAnswered;  // Only enable if all answered
 continueBtn.addEventListener("click", () => {
 if (continueBtn.disabled) return;  // Prevent action if not ready
 
+
 const rows = guestListContainer.querySelectorAll(".guest-row");
 let guests = [];
 let acceptedGuests = [];  // Add this for URL params
@@ -493,7 +494,5 @@ fetch("https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9Mtu
 const params = new URLSearchParams();
 params.set("guests", JSON.stringify(acceptedGuests));
 window.location.href = "confirmation.html?" + params.toString();
+
 });
-
-
-
