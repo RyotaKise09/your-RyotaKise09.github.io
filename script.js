@@ -418,13 +418,13 @@ if (name.includes("&")) {
 function acceptGuest(btn) {
     btn.classList.add("selected");
     btn.nextElementSibling.classList.remove("selected");
-    checkAllAnswered();
+    continueBtn.disabled = !checkAllAnswered();  // Enable button if all answered
 }
 
 function declineGuest(btn) {
     btn.classList.add("selected");
     btn.previousElementSibling.classList.remove("selected");
-    checkAllAnswered();
+    continueBtn.disabled = !checkAllAnswered();  // Enable button if all answered
 }
 
 
@@ -489,6 +489,7 @@ function checkAllAnswered() {
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
