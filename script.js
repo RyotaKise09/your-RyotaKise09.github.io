@@ -448,7 +448,7 @@ continueBtn.addEventListener("click", () => {
 
     const rows = guestListContainer.querySelectorAll(".guest-row");
     let guests = [];
-    let acceptedGuests = [];  // Add this for URL params
+    let acceptedGuests = [];
     let acceptedCount = 0;
 
     rows.forEach(row => {
@@ -456,7 +456,7 @@ continueBtn.addEventListener("click", () => {
         const accepted = row.querySelector(".accept-btn").classList.contains("selected");
         if (accepted) {
             acceptedCount++;
-            acceptedGuests.push(name);  // Collect for URL
+            acceptedGuests.push(name);
         }
         guests.push({ name, accepted });
     });
@@ -464,19 +464,29 @@ continueBtn.addEventListener("click", () => {
     const groupName = searchInput.value.trim();
     const payload = { groupName, seats: acceptedCount, guests };
 
-    // Submit to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    }).catch(err => console.error("Fetch error:", err));  // Log for debugging
+    // Create a hidden form for submission (easiest way to POST reliably on mobile)
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec";
+    form.style.display = "none";  // Hide it
 
-    // Redirect with accepted guests in URL params (for confirmation.html to display)
+    // Add the data as a hidden input
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";  // Matches the script change above
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+
+    // Add the form to the page and submit it
+    document.body.appendChild(form);
+    form.submit();
+
+    // Redirect immediately after submission (no need to wait for response)
     const params = new URLSearchParams();
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
