@@ -463,52 +463,41 @@ function checkAllAnswered() {
 
     continueBtn.disabled = !allAnswered;
 }
-document.getElementById("continueBtn").addEventListener("click", () => {
-    const selectedName = document.getElementById("searchName").value.trim();
-    if (selectedName.length > 0) {
-        // Redirect with name as URL parameter
-        window.location.href = "confirmation.html?name=" + encodeURIComponent(selectedName);
-    }
-});
-
 continueBtn.addEventListener("click", () => {
-  const rows = guestListContainer.querySelectorAll(".guest-row");
+    if (continueBtn.disabled) return;  // Prevent action if button is disabled
 
-  let guests = [];
-  let acceptedCount = 0;
+    const rows = guestListContainer.querySelectorAll(".guest-row");
+    let guests = [];
+    let acceptedGuests = [];  // For URL params
+    let acceptedCount = 0;
 
-  rows.forEach(row => {
-    const name = row.querySelector(".guest-name").textContent;
-    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
-
-    if (accepted) acceptedCount++;
-
-    guests.push({
-      name,
-      accepted
+    rows.forEach(row => {
+        const name = row.querySelector(".guest-name").textContent;
+        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+        if (accepted) {
+            acceptedCount++;
+            acceptedGuests.push(name);
+        }
+        guests.push({ name, accepted });
     });
-  });
 
-  const groupName = searchInput.value.trim();
+    const groupName = searchInput.value.trim();
+    const payload = { groupName, seats: acceptedCount, guests };
 
-  const payload = {
-    groupName,
-    seats: acceptedCount,
-    guests
-  };
+    // Submit to Google Sheets
+    fetch("https://script.google.com/macros/s/AKfycbw7hXT77QZHu3ui3BEr7GAyW4OC0pf7WQXs7J32jMEAwM1VZgwKxESHlBX3dTVcfF4T/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    }).catch(err => console.error("Fetch error:", err));  // Log errors
 
- fetch("https://script.google.com/macros/s/AKfycbw7hXT77QZHu3ui3BEr7GAyW4OC0pf7WQXs7J32jMEAwM1VZgwKxESHlBX3dTVcfF4T/exec", {  // Replace with your actual URL
-  method: "POST",
-  mode: "no-cors",  // Keep this for cross-origin requests
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(payload)
+    // Redirect with accepted guests in URL
+    const params = new URLSearchParams();
+    params.set("guests", JSON.stringify(acceptedGuests));
+    window.location.href = "confirmation.html?" + params.toString();
 });
 
-  // Redirect after submit
-  window.location.href = "confirmation.html";
-});
 
 
 
