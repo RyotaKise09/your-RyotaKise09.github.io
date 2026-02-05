@@ -462,27 +462,20 @@ continueBtn.addEventListener("click", () => {
     const groupName = searchInput.value.trim();
     const payload = { groupName, seats: acceptedCount, guests };
 
-    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        return response.json();
-    })
-    .then(data => {
-        console.log("Submission successful:", data);
-        const params = new URLSearchParams();
-        params.set("guests", JSON.stringify(acceptedGuests));
-        window.location.href = "confirmation.html?" + params.toString();
-    })
-    .catch(err => {
-        console.error("Submission failed:", err);
-        alert("Submission failed. Check console and try again.");
-    });
+   fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+}).catch(err => console.error("Fetch error:", err));  // Log for debugging
+
+// Redirect with accepted guests in URL params (for confirmation.html to display)
+const params = new URLSearchParams();
+params.set("guests", JSON.stringify(acceptedGuests));
+window.location.href = "confirmation.html?" + params.toString();
+
 });
+
 
 
 
