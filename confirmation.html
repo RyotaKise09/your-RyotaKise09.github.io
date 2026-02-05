@@ -1,49 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RSVP Confirmation</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Confirmation</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <div class="confirm-box">
+        <h1>Thank You for Your RSVP!</h1>
+        <p class="details">
+            Your response has been recorded.  
+            Below are the guests you confirmed:
+        </p>
+        <div id="guestListConfirmed"></div>
+        <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
+    </div>
 
-<div class="confirm-box">
-    <h1>Thank You for Your RSVP!</h1>
+    <script>
+        // Get all accepted guests from URL
+        const params = new URLSearchParams(window.location.search);
+        const guestsParam = params.get("guests");
+        console.log("Raw guests param from URL:", guestsParam);  // Debug: Check if param exists
 
-    <p class="details">
-        Your response has been recorded.  
-        Below are the guests you confirmed:
-    </p>
+        let guests = [];
+        if (guestsParam) {
+            try {
+                guests = JSON.parse(guestsParam);
+                console.log("Parsed guests array:", guests);  // Debug: Check parsed array
+            } catch (e) {
+                console.error("Error parsing guests param:", e);
+                guests = [];  // Fallback to empty
+            }
+        } else {
+            console.warn("No 'guests' param in URL");  // Debug: If missing
+        }
 
-    <div id="guestListConfirmed"></div>
+        const container = document.getElementById("guestListConfirmed");
 
-    <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
-</div>
+        if (guests.length === 0) {
+            container.innerHTML = "<p>No guests were accepted.</p>";
+            console.log("No guests to display");  // Debug
+        } else {
+            container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;  // Show count
+            guests.forEach(name => {
+                const div = document.createElement("p");
+                div.className = "confirmed-name";
+                div.textContent = "✔ " + name;
+                container.appendChild(div);
+            });
+            console.log("Displayed guests:", guests);  // Debug
+        }
 
-<script>
-    // Get all accepted guests from URL
-    const params = new URLSearchParams(window.location.search);
-    const guests = JSON.parse(params.get("guests") || "[]");
-
-    const container = document.getElementById("guestListConfirmed");
-
-    if (guests.length === 0) {
-        container.innerHTML = "<p>No guests were accepted.</p>";
-    } else {
-        guests.forEach(name => {
-            const div = document.createElement("p");
-            div.className = "confirmed-name";
-            div.textContent = "✔ " + name;
-            container.appendChild(div);
-        });
-    }
-
-    function goHome() {
-        window.location.href = "Wedding.html";
-    }
-</script>
-
+        function goHome() {
+            window.location.href = "index.html";
+        }
+    </script>
 </body>
 </html>
