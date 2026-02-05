@@ -443,18 +443,21 @@ function checkAllAnswered() {
 }
 
 // ------------------ SINGLE CONTINUE BUTTON LISTENER -------------------
-const continueBtn = document.getElementById("continueBtn");  // Define once at the top if not already
 continueBtn.addEventListener("click", () => {
     if (continueBtn.disabled) return;  // Prevent action if not ready
 
     const rows = guestListContainer.querySelectorAll(".guest-row");
     let guests = [];
+    let acceptedGuests = [];  // Add this for URL params
     let acceptedCount = 0;
 
     rows.forEach(row => {
         const name = row.querySelector(".guest-name").textContent;
         const accepted = row.querySelector(".accept-btn").classList.contains("selected");
-        if (accepted) acceptedCount++;
+        if (accepted) {
+            acceptedCount++;
+            acceptedGuests.push(name);  // Collect for URL
+        }
         guests.push({ name, accepted });
     });
 
@@ -469,9 +472,12 @@ continueBtn.addEventListener("click", () => {
         body: JSON.stringify(payload)
     }).catch(err => console.error("Fetch error:", err));  // Log for debugging
 
-    // Redirect after submit (always happens)
-    window.location.href = "confirmation.html";
+    // Redirect with accepted guests in URL params (for confirmation.html to display)
+    const params = new URLSearchParams();
+    params.set("guests", JSON.stringify(acceptedGuests));
+    window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
