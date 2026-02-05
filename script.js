@@ -458,41 +458,51 @@ continueBtn.disabled = !allAnswered;  // Only enable if all answered
 
 }
 
-
+const continueBtn = document.getElementById("continueBtn");
+if (!continueBtn) {
+    console.error("continueBtn not found!");
+}
 // ------------------ SINGLE CONTINUE BUTTON LISTENER -------------------
 continueBtn.addEventListener("click", () => {
-if (continueBtn.disabled) return;  // Prevent action if not ready
+    if (continueBtn.disabled) return;  // Prevent action if not ready
 
+    const rows = guestListContainer.querySelectorAll(".guest-row");
+    let guests = [];
+    let acceptedGuests = [];
+    let acceptedCount = 0;
 
-const rows = guestListContainer.querySelectorAll(".guest-row");
-let guests = [];
-let acceptedGuests = [];  // Add this for URL params
-let acceptedCount = 0;
+    rows.forEach(row => {
+        const name = row.querySelector(".guest-name").textContent;
+        const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+        if (accepted) {
+            acceptedCount++;
+            acceptedGuests.push(name);
+        }
+        guests.push({ name, accepted });
+    });
 
-rows.forEach(row => {
-    const name = row.querySelector(".guest-name").textContent;
-    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
-    if (accepted) {
-        acceptedCount++;
-        acceptedGuests.push(name);  // Collect for URL
-    }
-    guests.push({ name, accepted });
+    const groupName = searchInput.value.trim();
+    const payload = { groupName, seats: acceptedCount, guests };
+
+    // Create a hidden form for reliable submission (works on mobile)
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9MtujYdU8nEVHMH3csYr-wSgww86FBrikwRO0a/exec";  // Your script URL
+    form.style.display = "none";
+
+    // Add data as hidden input
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+
+    // Submit and redirect
+    document.body.appendChild(form);
+    form.submit();
+
+    const params = new URLSearchParams();
+    params.set("guests", JSON.stringify(acceptedGuests));
+    window.location.href = "confirmation.html?" + params.toString();
 });
 
-const groupName = searchInput.value.trim();
-const payload = { groupName, seats: acceptedCount, guests };
-
-// Submit to Google Sheets
-fetch("https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9MtujYdU8nEVHMH3csYr-wSgww86FBrikwRO0a/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-}).catch(err => console.error("Fetch error:", err));  // Log for debugging
-
-// Redirect with accepted guests in URL params (for confirmation.html to display)
-const params = new URLSearchParams();
-params.set("guests", JSON.stringify(acceptedGuests));
-window.location.href = "confirmation.html?" + params.toString();
-
-});
