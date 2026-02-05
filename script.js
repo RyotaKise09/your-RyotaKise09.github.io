@@ -497,7 +497,7 @@ continueBtn.addEventListener("click", () => {
     guests
   };
 
- fetch("https://script.google.com/macros/s/AKfycbzbTfK8lnNa1W9AYXe2VMDx_OCIMzw_fv-syPld0YEThewclHaHOoBtlUU7zVr-R82I/exec", {  // Replace with your actual URL
+ fetch("https://script.google.com/macros/s/AKfycbw7hXT77QZHu3ui3BEr7GAyW4OC0pf7WQXs7J32jMEAwM1VZgwKxESHlBX3dTVcfF4T/exec", {  // Replace with your actual URL
   method: "POST",
   mode: "no-cors",  // Keep this for cross-origin requests
   headers: {
@@ -509,6 +509,7 @@ continueBtn.addEventListener("click", () => {
   // Redirect after submit
   window.location.href = "confirmation.html";
 });
+
 
 
 
