@@ -414,20 +414,18 @@ if (name.includes("&")) {
     });
 }
 
-
 // ------------------ ACCEPT / DECLINE LOGIC -------------------
 function acceptGuest(btn) {
     btn.classList.add("selected");
     btn.nextElementSibling.classList.remove("selected");
-    continueBtn.disabled = !checkAllAnswered();  // Enable button if all answered
+    continueBtn.disabled = !checkAllAnswered();
 }
 
 function declineGuest(btn) {
     btn.classList.add("selected");
     btn.previousElementSibling.classList.remove("selected");
-    continueBtn.disabled = !checkAllAnswered();  // Enable button if all answered
+    continueBtn.disabled = !checkAllAnswered();
 }
-
 
 // ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
@@ -435,17 +433,16 @@ function checkAllAnswered() {
     for (const row of rows) {
         const acceptBtn = row.querySelector(".accept-btn");
         const declineBtn = row.querySelector(".decline-btn");
-        // Check if neither button is selected
         if (!acceptBtn.classList.contains("selected") && !declineBtn.classList.contains("selected")) {
-            return false; // Not all have answered
+            return false;
         }
     }
-    return true; // All have answered
+    return true;
 }
 
     // Redirect with accepted guests encoded in URL
- continueBtn.addEventListener("click", () => {
-    if (continueBtn.disabled) return;  // Prevent if disabled
+continueBtn.addEventListener("click", () => {
+    if (continueBtn.disabled) return;
 
     const rows = guestListContainer.querySelectorAll(".guest-row");
     let guests = [];
@@ -465,8 +462,7 @@ function checkAllAnswered() {
     const groupName = searchInput.value.trim();
     const payload = { groupName, seats: acceptedCount, guests };
 
-    // Submit with CORS for error visibility
-    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {  // Update with new URL if needed
+    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
@@ -478,7 +474,6 @@ function checkAllAnswered() {
     })
     .then(data => {
         console.log("Submission successful:", data);
-        // Redirect only on success
         const params = new URLSearchParams();
         params.set("guests", JSON.stringify(acceptedGuests));
         window.location.href = "confirmation.html?" + params.toString();
@@ -486,9 +481,9 @@ function checkAllAnswered() {
     .catch(err => {
         console.error("Submission failed:", err);
         alert("Submission failed. Check console and try again.");
-        // No redirect on failure
     });
 });
+
 
 
 
