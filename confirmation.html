@@ -1,51 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RSVP Confirmation</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation</title>
+    <!-- Add your CSS/styles here -->
 </head>
-
 <body>
+    <h1>RSVP Confirmation</h1>
+    <div id="acceptedGuestsDisplay">
+        <!-- This will be populated by JavaScript -->
+    </div>
 
-<div class="confirm-box">
-    <h1>Thank You for Your RSVP!</h1>
+    <script>
+        // On page load, parse URL params and display accepted guests
+        window.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestsParam = urlParams.get("guests");
+            
+            let acceptedGuests = [];
+            if (guestsParam) {
+                try {
+                    acceptedGuests = JSON.parse(guestsParam);  // Parse the JSON array
+                } catch (e) {
+                    console.error("Error parsing guests param:", e);
+                }
+            }
 
-    <p class="details">
-        Your response has been recorded.  
-        Below are the guests you confirmed:
-    </p>
-
-    <div id="guestListConfirmed"></div>
-
-    <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
-</div>
-
-<script>
-    // Get all accepted guests from URL
-window.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const acceptedGuests = JSON.parse(urlParams.get("guests") || "[]");
-
-    if (acceptedGuests.length > 0) {
-        // Display the list (customize this based on your HTML)
-        const displayEl = document.getElementById("acceptedGuestsDisplay");  // Add an element like <div id="acceptedGuestsDisplay"></div>
-        displayEl.innerHTML = `<h2>Accepted Guests:</h2><ul>${acceptedGuests.map(name => `<li>${name}</li>`).join("")}</ul>`;
-    } else {
-        // Fallback message
-        const displayEl = document.getElementById("acceptedGuestsDisplay");
-        displayEl.innerHTML = "<p>No guests were accepted.</p>";
-    }
-});
-
-    function goHome() {
-        window.location.href = "index.html";
-    }
-</script>
-
+            const displayEl = document.getElementById("acceptedGuestsDisplay");
+            if (acceptedGuests.length > 0) {
+                // Display the list of accepted guests
+                displayEl.innerHTML = `
+                    <h2>Accepted Guests (${acceptedGuests.length}):</h2>
+                    <ul>
+                        ${acceptedGuests.map(name => `<li>${name}</li>`).join("")}
+                    </ul>
+                `;
+            } else {
+                // Fallback if no guests accepted
+                displayEl.innerHTML = "<p>No guests were accepted.</p>";
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
