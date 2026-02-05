@@ -19,51 +19,48 @@
     </div>
 
     <script>
-        // Get all accepted guests from URL
-        const params = new URLSearchParams(window.location.search);
-        const guestsParam = params.get("guests");
-        console.log("Raw guests param from URL:", guestsParam);  // Debug: Check if param exists
+    // Get all accepted guests from URL
+    const params = new URLSearchParams(window.location.search);
+    const guestsParam = params.get("guests");
+    console.log("Raw guests param:", guestsParam);  // Debug log
 
-        let guests = [];
-        if (guestsParam) {
-            try {
-                guests = JSON.parse(guestsParam);
-                console.log("Parsed guests array:", guests);  // Debug: Check parsed array
-            } catch (e) {
-                console.error("Error parsing guests param:", e);
-                guests = [];  // Fallback to empty
-            }
-        } else {
-            console.warn("No 'guests' param in URL");  // Debug: If missing
+    let guests = [];
+    if (guestsParam) {
+        try {
+            guests = JSON.parse(guestsParam);
+        } catch (e) {
+            console.error("Parse error:", e);
+            guests = [];
         }
+    }
 
-        const container = document.getElementById("guestListConfirmed");
+    const container = document.getElementById("guestListConfirmed");
 
-        if (guests.length === 0) {
-            container.innerHTML = "<p>No guests were accepted.</p>";
-            console.log("No guests to display");  // Debug
-        } else {
-            container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;  // Show count
-            guests.forEach(name => {
-                const div = document.createElement("p");
-                div.className = "confirmed-name";
-                div.textContent = "✔ " + name;
-                container.appendChild(div);
-            });
-            console.log("Displayed guests:", guests);  // Debug
+    if (guests.length === 0) {
+        container.innerHTML = "<p>No guests were accepted.</p>";
+    } else {
+        container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;
+        guests.forEach(name => {
+            const div = document.createElement("p");
+            div.className = "confirmed-name";
+            div.textContent = "✔ " + name;
+            container.appendChild(div);
+        });
+    }
+
+    function goHome() {
+        console.log("Button clicked, attempting redirect");  // Debug
+        const target = "index.html";  // Change to your main page file (e.g., "index.html" if that's it)
+        try {
+            window.location.href = target;
+        } catch (e) {
+            console.error("Redirect error:", e);
+            alert("Redirect failed. Go to " + target + " manually.");
         }
-
-        function goHome() {
-            console.log("Back to Invitation button clicked");  // Debug: Confirm click
-            const targetPage = "index.html";  // Change this to your actual main page, e.g., "Wedding.html"
-            try {
-                window.location.href = targetPage;
-                console.log("Redirecting to:", targetPage);  // Debug: Confirm redirect attempt
-            } catch (e) {
-                console.error("Redirect failed:", e);
-                alert("Redirect failed. Please navigate manually to " + targetPage);
-            }
+    }
+</script>
         }
     </script>
 </body>
 </html>
+
