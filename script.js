@@ -470,7 +470,7 @@ function checkAllAnswered() {
     const payload = { groupName, seats: acceptedCount, guests };
 
     // Submit with CORS for error visibility
-    fetch("https://script.google.com/macros/s/YOUR_NEW_SCRIPT_ID/exec", {  // Update with new URL
+    fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {  // Update with new URL
         method: "POST",
         mode: "cors",  // Changed from no-cors
         headers: { "Content-Type": "application/json" },
@@ -494,6 +494,7 @@ function checkAllAnswered() {
     params.set("guests", JSON.stringify(acceptedGuests));
     window.location.href = "confirmation.html?" + params.toString();
 });
+
 
 
 
