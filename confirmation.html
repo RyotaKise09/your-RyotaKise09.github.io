@@ -54,10 +54,16 @@
         }
 
         function goHome() {
-            window.location.href = "index.html";
+            console.log("Back to Invitation button clicked");  // Debug: Confirm click
+            const targetPage = "index.html";  // Change this to your actual main page, e.g., "Wedding.html"
+            try {
+                window.location.href = targetPage;
+                console.log("Redirecting to:", targetPage);  // Debug: Confirm redirect attempt
+            } catch (e) {
+                console.error("Redirect failed:", e);
+                alert("Redirect failed. Please navigate manually to " + targetPage);
+            }
         }
     </script>
 </body>
 </html>
-
-
