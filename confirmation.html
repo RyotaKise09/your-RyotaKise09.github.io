@@ -24,7 +24,6 @@
 
 <script>
     // Get all accepted guests from URL
-   // On page load, parse URL params and display accepted guests
 window.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const acceptedGuests = JSON.parse(urlParams.get("guests") || "[]");
@@ -39,7 +38,6 @@ window.addEventListener("DOMContentLoaded", () => {
         displayEl.innerHTML = "<p>No guests were accepted.</p>";
     }
 });
-    }
 
     function goHome() {
         window.location.href = "index.html";
@@ -48,5 +46,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
