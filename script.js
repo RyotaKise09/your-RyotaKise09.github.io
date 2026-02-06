@@ -269,70 +269,68 @@ const searchInput = document.getElementById("searchName");
 const suggestionsBox = document.getElementById("suggestions");
 const guestListContainer = document.getElementById("guestList");
 const continueBtn = document.getElementById("continueBtn");
+const popupOverlay = document.getElementById("popupOverlay");
 
 // OPEN / CLOSE POPUP
 function openPopup() {
-  document.getElementById("popupOverlay").style.display = "flex";
+  if (popupOverlay) {
+    popupOverlay.style.display = "flex";
+  }
 }
 function closePopup() {
-  document.getElementById("popupOverlay").style.display = "none";
+  if (popupOverlay) {
+    popupOverlay.style.display = "none";
+  }
 }
 
 // ------------------ AUTOCOMPLETE -------------------
-searchInput.addEventListener("input", () => {
-  const text = searchInput.value.toLowerCase();
-  suggestionsBox.innerHTML = "";
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    const text = searchInput.value.toLowerCase();
+    if (suggestionsBox) suggestionsBox.innerHTML = "";
 
-  if (text.length === 0) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
+    if (text.length === 0) {
+      if (suggestionsBox) suggestionsBox.style.display = "none";
+      return;
+    }
 
-  const matches = Object.keys(guestGroups).filter(name =>
-    name.toLowerCase().includes(text)
-  );
+    const matches = Object.keys(guestGroups).filter(name =>
+      name.toLowerCase().includes(text)
+    );
 
-  if (matches.length === 0) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
+    if (matches.length === 0) {
+      if (suggestionsBox) suggestionsBox.style.display = "none";
+      return;
+    }
 
-  suggestionsBox.style.display = "block";
+    if (suggestionsBox) suggestionsBox.style.display = "block";
 
-  matches.forEach(name => {
-    const div = document.createElement("div");
-    div.className = "suggestion-item";
-    div.textContent = name;
-    div.onclick = () => selectGuest(name);
-    suggestionsBox.appendChild(div);
+    matches.forEach(name => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      div.textContent = name;
+      div.onclick = () => selectGuest(name);
+      if (suggestionsBox) suggestionsBox.appendChild(div);
+    });
   });
-});
+}
 
 // ------------------ SELECT GUEST -------------------
 function selectGuest(name) {
-  searchInput.value = name;
-  suggestionsBox.style.display = "none";
+  if (searchInput) searchInput.value = name;
+  if (suggestionsBox) suggestionsBox.style.display = "none";
   loadGuestList(name);
 
   // SHOW RESERVED SEATS COUNT
-  // Correct seat counting
   let seats;
-
-  // If combined couple
   if (name.includes("&")) {
-    seats = guestGroups[name].length + 1; 
-    // guestGroups[name] includes combined name as 1 entry
-    // +1 converts it into 2 seats
+    seats = guestGroups[name].length + 1;
   } else {
     seats = guestGroups[name].length;
-    // single person + guests already correct
   }
-  // safe: ensure element exists then write HTML
   const reservedEl = document.getElementById("reservedSeatsText");
   if (reservedEl) {
     reservedEl.innerHTML = `We reserved <strong>${seats}</strong> seat(s) for you`;
-  } else {
-    console.warn("reservedSeatsText element not found");
   }
 
   // Open the popup after loading the guest list
@@ -341,8 +339,8 @@ function selectGuest(name) {
 
 // ------------------ LOAD GUEST LIST -------------------
 function loadGuestList(name) {
-  guestListContainer.innerHTML = "";
-  continueBtn.disabled = true;
+  if (guestListContainer) guestListContainer.innerHTML = "";
+  if (continueBtn) continueBtn.disabled = true;
 
   let guests = [...guestGroups[name]];
 
@@ -350,39 +348,26 @@ function loadGuestList(name) {
   if (name.includes("&")) {
     let [person1, person2] = name.split("&").map(n => n.trim());
 
-    // Extract last names safely
     const lastName1 = person1.split(" ").slice(-1)[0];
     const lastName2 = person2.split(" ").slice(-1)[0];
 
-    // CASE 1: Last names are the same → give shared last name to both
     if (lastName1 === lastName2) {
       const shared = lastName1;
-
-      // apply shared last name to person1 if missing
       if (!person1.split(" ").includes(shared)) {
         person1 = person1 + " " + shared;
       }
-
-      // apply shared last name to person2 if missing
       if (!person2.split(" ").includes(shared)) {
         person2 = person2 + " " + shared;
       }
-    }
-
-    // CASE 2: Only one person has last name → copy it to the one who doesn't
-    else {
-      // person1 has NO last name but person2 does
+    } else {
       if (person1.split(" ").length === 1 && person2.split(" ").length >= 2) {
         person1 = person1 + " " + lastName2;
       }
-
-      // person2 has NO last name but person1 does
       if (person2.split(" ").length === 1 && person1.split(" ").length >= 2) {
         person2 = person2 + " " + lastName1;
       }
     }
 
-    // REPLACE in guest list
     guests = [person1, person2, ...guests.slice(1)];
   }
 
@@ -401,7 +386,7 @@ function loadGuestList(name) {
       </div>
     `;
 
-    guestListContainer.appendChild(row);
+    if (guestListContainer) guestListContainer.appendChild(row);
   });
 }
 
@@ -420,6 +405,7 @@ function declineGuest(btn) {
 
 // ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
+  if (!guestListContainer) return;
   const rows = guestListContainer.querySelectorAll(".guest-row");
   let allAnswered = true;
 
@@ -429,45 +415,48 @@ function checkAllAnswered() {
     if (!acc && !dec) allAnswered = false;
   });
 
-  continueBtn.disabled = !allAnswered;
+  if (continueBtn) continueBtn.disabled = !allAnswered;
 }
 
 // ------------------ CONTINUE BUTTON LOGIC -------------------
-continueBtn.addEventListener("click", () => {
-  const rows = guestListContainer.querySelectorAll(".guest-row");
+if (continueBtn) {
+  continueBtn.addEventListener("click", () => {
+    if (!guestListContainer) return;
+    const rows = guestListContainer.querySelectorAll(".guest-row");
 
-  let guests = [];
-  let acceptedCount = 0;
+    let guests = [];
+    let acceptedCount = 0;
 
-  rows.forEach(row => {
-    const name = row.querySelector(".guest-name").textContent;
-    const accepted = row.querySelector(".accept-btn").classList.contains("selected");
+    rows.forEach(row => {
+      const name = row.querySelector(".guest-name").textContent;
+      const accepted = row.querySelector(".accept-btn").classList.contains("selected");
 
-    if (accepted) acceptedCount++;
+      if (accepted) acceptedCount++;
 
-    guests.push({
-      name,
-      accepted
+      guests.push({
+        name,
+        accepted
+      });
     });
+
+    const groupName = searchInput ? searchInput.value.trim() : "";
+
+    const payload = {
+      groupName,
+      seats: acceptedCount,
+      guests
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9MtujYdU8nEVHMH3csYr-wSgww86FBrikwRO0a/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    // Redirect after submit
+    window.location.href = "confirmation.html";
   });
-
-  const groupName = searchInput.value.trim();
-
-  const payload = {
-    groupName,
-    seats: acceptedCount,
-    guests
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9MtujYdU8nEVHMH3csYr-wSgww86FBrikwRO0a/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-
-  // Redirect after submit
-  window.location.href = "confirmation.html";
-});
+}
