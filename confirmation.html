@@ -6,7 +6,6 @@
     <title>RSVP Confirmation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="confirm-box">
         <h1>Thank You for Your RSVP!</h1>
@@ -19,48 +18,47 @@
     </div>
 
     <script>
-    // Get all accepted guests from URL
-    const params = new URLSearchParams(window.location.search);
-    const guestsParam = params.get("guests");
-    console.log("Raw guests param:", guestsParam);  // Debug log
+        // Get all accepted guests from URL
+        const params = new URLSearchParams(window.location.search);
+        const guestsParam = params.get("guests");
+        console.log("Raw guests param:", guestsParam);  // Debug log
 
-    let guests = [];
-    if (guestsParam) {
-        try {
-            guests = JSON.parse(guestsParam);
-        } catch (e) {
-            console.error("Parse error:", e);
-            guests = [];
+        let guests = [];
+        if (guestsParam) {
+            try {
+                // Decode and parse the JSON array
+                guests = JSON.parse(decodeURIComponent(guestsParam));
+                console.log("Parsed guests:", guests);  // Debug log
+            } catch (e) {
+                console.error("Parse error:", e);
+                guests = [];
+            }
         }
-    }
 
-    const container = document.getElementById("guestListConfirmed");
+        const container = document.getElementById("guestListConfirmed");
 
-    if (guests.length === 0) {
-        container.innerHTML = "<p>No guests were accepted.</p>";
-    } else {
-        container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;
-        guests.forEach(name => {
-            const div = document.createElement("p");
-            div.className = "confirmed-name";
-            div.textContent = "✔ " + name;
-            container.appendChild(div);
-        });
-    }
-
-    function goHome() {
-        console.log("Button clicked, attempting redirect");  // Debug
-        const target = "index.html";  // Change to your main page file (e.g., "index.html" if that's it)
-        try {
-            window.location.href = target;
-        } catch (e) {
-            console.error("Redirect error:", e);
-            alert("Redirect failed. Go to " + target + " manually.");
+        if (guests.length === 0) {
+            container.innerHTML = "<p>No guests were accepted.</p>";
+        } else {
+            container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;
+            guests.forEach(name => {
+                const div = document.createElement("p");
+                div.className = "confirmed-name";
+                div.textContent = "✔ " + name;
+                container.appendChild(div);
+            });
         }
-    }
-</script>
+
+        function goHome() {
+            console.log("Button clicked, attempting redirect");  // Debug
+            const target = "index.html";  // Change to your main page file (e.g., "index.html")
+            try {
+                window.location.href = target;
+            } catch (e) {
+                console.error("Redirect error:", e);
+                alert("Redirect failed. Go to " + target + " manually.");
+            }
         }
     </script>
 </body>
 </html>
-
