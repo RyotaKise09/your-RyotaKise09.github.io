@@ -19,36 +19,38 @@
     </div>
 
     <script>
+        // Get all accepted guests from URL
         const params = new URLSearchParams(window.location.search);
         const guestsParam = params.get("guests");
+        console.log("Raw guests param from URL:", guestsParam);  // Debug: Check if param exists
 
         let guests = [];
-
         if (guestsParam) {
             try {
-                guests = JSON.parse(decodeURIComponent(guestsParam));
-                // Ensure guests is an array of strings
-                if (!Array.isArray(guests)) {
-                    guests = [];
-                }
-            } catch (err) {
-                console.error("Guest parse error:", err);
-                guests = [];
+                guests = JSON.parse(guestsParam);
+                console.log("Parsed guests array:", guests);  // Debug: Check parsed array
+            } catch (e) {
+                console.error("Error parsing guests param:", e);
+                guests = [];  // Fallback to empty
             }
+        } else {
+            console.warn("No 'guests' param in URL");  // Debug: If missing
         }
 
         const container = document.getElementById("guestListConfirmed");
 
         if (guests.length === 0) {
-            container.innerHTML = "<p>No guests were confirmed.</p>";
+            container.innerHTML = "<p>No guests were accepted.</p>";
+            console.log("No guests to display");  // Debug
         } else {
+            container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;  // Show count
             guests.forEach(name => {
-                if (typeof name === 'string' && name.trim()) {
-                    const p = document.createElement("p");
-                    p.textContent = "✔ " + name.trim();
-                    container.appendChild(p);
-                }
+                const div = document.createElement("p");
+                div.className = "confirmed-name";
+                div.textContent = "✔ " + name;
+                container.appendChild(div);
             });
+            console.log("Displayed guests:", guests);  // Debug
         }
 
         function goHome() {
@@ -57,6 +59,3 @@
     </script>
 </body>
 </html>
-
-
-
