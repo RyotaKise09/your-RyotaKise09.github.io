@@ -19,39 +19,35 @@
     </div>
 
     <script>
-        // Get all accepted guests from URL
-        const params = new URLSearchParams(window.location.search);
-        const guestsParam = params.get("guests");
-        console.log("Raw guests param:", guestsParam);  // Debug log
+       const params = new URLSearchParams(window.location.search);
+const guestsParam = params.get("guests");
 
-        let guests = [];
-        if (guestsParam) {
-            try {
-                // Decode the URL parameter first, then parse as JSON
-                guests = JSON.parse(decodeURIComponent(guestsParam));
-                console.log("Parsed guests:", guests);  // Debug log
-            } catch (e) {
-                console.error("Parse error:", e);
-                guests = [];  // Fallback to empty array
-            }
-        }
+let guests = [];
 
-        const container = document.getElementById("guestListConfirmed");
+if (guestsParam) {
+  try {
+    guests = JSON.parse(decodeURIComponent(guestsParam));
+  } catch (err) {
+    console.error("Guest parse error:", err);
+  }
+}
 
-        if (guests.length === 0) {
-            container.innerHTML = "<p>No guests were accepted.</p>";
-        } else {
-            guests.forEach(name => {
-                const div = document.createElement("p");
-                div.className = "confirmed-name";
-                div.textContent = "✔ " + name;
-                container.appendChild(div);
-            });
-        }
+const container = document.getElementById("guestListConfirmed");
 
-        function goHome() {
-            window.location.href = "index.html";
-        }
+if (!guests || guests.length === 0) {
+  container.innerHTML = "<p>No guests were accepted.</p>";
+} else {
+  guests.forEach(name => {
+    const p = document.createElement("p");
+    p.textContent = "✔ " + name;
+    container.appendChild(p);
+  });
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}
     </script>
 </body>
 </html>
+
