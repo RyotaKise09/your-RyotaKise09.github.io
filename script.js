@@ -334,6 +334,9 @@ function selectGuest(name) {
   } else {
     console.warn("reservedSeatsText element not found");
   }
+
+  // Open the popup after loading the guest list
+  openPopup();
 }
 
 // ------------------ LOAD GUEST LIST -------------------
