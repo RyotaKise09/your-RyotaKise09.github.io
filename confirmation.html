@@ -19,35 +19,47 @@
     </div>
 
     <script>
-       const params = new URLSearchParams(window.location.search);
-const guestsParam = params.get("guests");
+        const params = new URLSearchParams(window.location.search);
+        const guestsParam = params.get("guests");
 
-let guests = [];
+        let guests = [];
 
-if (guestsParam) {
-  try {
-    guests = JSON.parse(decodeURIComponent(guestsParam));
-  } catch (err) {
-    console.error("Guest parse error:", err);
-  }
-}
+        if (guestsParam) {
+            try {
+                guests = JSON.parse(decodeURIComponent(guestsParam));
+                // Ensure guests is an array of strings
+                if (!Array.isArray(guests)) {
+                    guests = [];
+                }
+            } catch (err) {
+                console.error("Guest parse error:", err);
+                guests = [];
+            }
+        }
 
-const container = document.getElementById("guestListConfirmed");
+        const container = document.getElementById("guestListConfirmed");
 
-if (!guests || guests.length === 0) {
-  container.innerHTML = "<p>No guests were accepted.</p>";
-} else {
-  guests.forEach(name => {
-    const p = document.createElement("p");
-    p.textContent = "✔ " + name;
-    container.appendChild(p);
-  });
-}
+        if (guests.length === 0) {
+            container.innerHTML = "<p>No guests were confirmed.</p>";
+        } else {
+            guests.forEach(name => {
+                if (typeof name === 'string' && name.trim()) {
+                    const p = document.createElement("p");
+                    p.textContent = "✔ " + name.trim();
+                    container.appendChild(p);
+                }
+            });
+            // If after filtering, no valid names, show no guests
+            if (container.children.length === 0) {
+                container.innerHTML = "<p>No guests were confirmed.</p>";
+            }
+        }
 
-function goHome() {
-  window.location.href = "index.html";
-}
+        function goHome() {
+            window.location.href = "index.html";
+        }
     </script>
 </body>
 </html>
+
 
