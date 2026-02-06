@@ -12,7 +12,6 @@
         <h1>Thank You for Your RSVP!</h1>
         <p class="details">
             Your response has been recorded.  
-            Below are the guests you confirmed:
         </p>
         <div id="guestListConfirmed"></div>
         <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
@@ -40,18 +39,22 @@
         const container = document.getElementById("guestListConfirmed");
 
         if (guests.length === 0) {
-            container.innerHTML = "<p>No guests were accepted.</p>";
-            console.log("No guests to display");  // Debug
-        } else {
-            container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;  // Show count
-            guests.forEach(name => {
-                const div = document.createElement("p");
-                div.className = "confirmed-name";
-                div.textContent = "✔ " + name;
-                container.appendChild(div);
-            });
-            console.log("Displayed guests:", guests);  // Debug
-        }
+    container.innerHTML = "<p>No guests were accepted.</p>";
+    console.log("No guests to display");  // Debug: Confirms no guests were parsed
+} else {
+    // Clear any previous content and add the count header
+    container.innerHTML = `<p><strong>${guests.length} guest(s) accepted:</strong></p>`;
+    
+    // Loop through each accepted guest and display them
+    guests.forEach(name => {
+        const div = document.createElement("p");
+        div.className = "confirmed-name";
+        div.textContent = "✔ " + name;
+        container.appendChild(div);
+    });
+    
+    console.log("Displayed guests:", guests);  // Debug: Logs the displayed guests for verification
+}
 
         function goHome() {
             window.location.href = "index.html";
@@ -59,3 +62,4 @@
     </script>
 </body>
 </html>
+
