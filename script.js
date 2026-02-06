@@ -497,7 +497,7 @@ continueBtn.addEventListener("click", () => {
     guests
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbwNTpBvlANxg4xxkedNP6ZaPY0n3GopUNMJjNc0mpsKIPMCbSTR8Y1Ii3J8hXKulWs/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbziivZM6XPcXcRM6-DTurzNeR_jXn9MtujYdU8nEVHMH3csYr-wSgww86FBrikwRO0a/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -515,3 +515,4 @@ continueBtn.addEventListener("click", () => {
 
 
 ~
+
