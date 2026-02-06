@@ -1,65 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSVP Invitation</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Confirmation</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <div class="invite-box">
-        <h1>You're Invited!</h1>
-        <p>Please select the guests who will attend:</p>
-        <form id="rsvpForm">
-            <div id="guestList">
-                <!-- Guests will be populated here -->
-            </div>
-            <button type="submit">Submit RSVP</button>
-        </form>
-    </div>
 
-    <script>
-        console.log("Invitation script loaded");  // Debug: Confirm script runs
+<div class="confirm-box">
+    <h1>Thank You for Your RSVP!</h1>
 
-        // Sample guest list (replace with dynamic data if needed)
-        const allGuests = ["John Doe", "Jane Smith", "Bob Johnson"];
+    <p class="details">
+        Your response has been recorded.  
+        Below are the guests you confirmed:
+    </p>
 
-        const guestListDiv = document.getElementById("guestList");
+    <div id="guestListConfirmed"></div>
 
-        // Create checkboxes for each guest
-        allGuests.forEach(guest => {
-            const label = document.createElement("label");
-            label.innerHTML = `
-                <input type="checkbox" name="guest" value="${guest}"> ${guest} (Accept)
-            `;
-            guestListDiv.appendChild(label);
-            guestListDiv.appendChild(document.createElement("br"));
+    <button class="home-btn" onclick="goHome()">BACK TO INVITATION</button>
+</div>
+
+<script>
+    // Get all accepted guests from URL
+    const params = new URLSearchParams(window.location.search);
+    const guests = JSON.parse(params.get("guests") || "[]");
+
+    const container = document.getElementById("guestListConfirmed");
+
+    if (guests.length === 0) {
+        container.innerHTML = "<p>No guests were accepted.</p>";
+    } else {
+        guests.forEach(name => {
+            const div = document.createElement("p");
+            div.className = "confirmed-name";
+            div.textContent = "✔ " + name;
+            container.appendChild(div);
         });
+    }
 
-        // Handle form submission
-        document.getElementById("rsvpForm").addEventListener("submit", function(event) {
-            event.preventDefault();  // Prevent default form submission
+    function goHome() {
+        window.location.href = "index.html";
+    }
+</script>
 
-            // Collect accepted guests
-            const checkboxes = document.querySelectorAll('input[name="guest"]:checked');
-            const acceptedGuests = Array.from(checkboxes).map(cb => cb.value);
-
-            console.log("Accepted guests array:", acceptedGuests);  // Debug: Check if array is populated
-
-            // Build the URL for the confirmation page
-            const jsonString = JSON.stringify(acceptedGuests);
-            console.log("JSON string:", jsonString);  // Debug: Check JSON
-            const encoded = encodeURIComponent(jsonString);
-            console.log("Encoded:", encoded);  // Debug: Check encoding
-            const url = "confirm.html?guests=" + encoded;
-            console.log("Full redirect URL:", url);  // Debug: Check final URL
-
-            // Temporary alert for debugging
-            alert("About to redirect to: " + url);
-
-            // Redirect
-            window.location.href = url;
-        });
-    </script>
 </body>
 </html>
