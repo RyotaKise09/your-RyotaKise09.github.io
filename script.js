@@ -457,6 +457,9 @@ if (continueBtn) {
     });
 
     // Redirect after submit
-    window.location.href = "confirmation.html";
+   const acceptedGuests = guests.filter(guest => guest.accepted).map(guest => guest.name);
+    const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
+    window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
