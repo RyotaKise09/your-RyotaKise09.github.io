@@ -1,6 +1,6 @@
 body {
     font-family: Georgia, serif;
-    background: #865833;
+    background: #c1a78e;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -323,3 +323,4 @@ p {
   z-index: 1;
   cursor: pointer;
 }
+
