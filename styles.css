@@ -6,7 +6,7 @@ body {
     align-items: center;
     padding: 40px;
     text-align: center;
-    color: #a5623c;
+    color: #c1a78e;
 }
 
 .invitation-box {
@@ -323,4 +323,5 @@ p {
   z-index: 1;
   cursor: pointer;
 }
+
 
