@@ -1,7 +1,9 @@
+// =========================
 // GUEST DATA
+// =========================
 const guestList = [
   {
-    name: "Louie & Stephanie Luico", 
+    name: "Louie & Stephanie Luico",
     guests: ["Mireya Atarah Luico", "Malika Arkisha Luico"]
   },
   {
@@ -255,42 +257,47 @@ const guestList = [
   {
     name: "Jerome & Aileen Martinez",
     guests: []
-  },
+  }
 ];
 
-// CONVERT LIST TO DICTIONARY FOR QUICK SEARCH
+// =========================
+// CONVERT TO DICTIONARY
+// =========================
 const guestGroups = {};
 guestList.forEach(entry => {
   guestGroups[entry.name] = [entry.name, ...entry.guests];
 });
 
+// =========================
 // DOM ELEMENTS
+// =========================
 const searchInput = document.getElementById("searchName");
 const suggestionsBox = document.getElementById("suggestions");
 const guestListContainer = document.getElementById("guestList");
 const continueBtn = document.getElementById("continueBtn");
 const popupOverlay = document.getElementById("popupOverlay");
 
-// OPEN / CLOSE POPUP
+// =========================
+// POPUP
+// =========================
 function openPopup() {
-  if (popupOverlay) {
-    popupOverlay.style.display = "flex";
-  }
-}
-function closePopup() {
-  if (popupOverlay) {
-    popupOverlay.style.display = "none";
-  }
+  if (popupOverlay) popupOverlay.style.display = "flex";
 }
 
-// ------------------ AUTOCOMPLETE -------------------
+function closePopup() {
+  if (popupOverlay) popupOverlay.style.display = "none";
+}
+
+// =========================
+// AUTOCOMPLETE
+// =========================
 if (searchInput) {
   searchInput.addEventListener("input", () => {
     const text = searchInput.value.toLowerCase();
-    if (suggestionsBox) suggestionsBox.innerHTML = "";
+    suggestionsBox.innerHTML = "";
 
-    if (text.length === 0) {
-      if (suggestionsBox) suggestionsBox.style.display = "none";
+    if (!text) {
+      suggestionsBox.style.display = "none";
       return;
     }
 
@@ -298,80 +305,64 @@ if (searchInput) {
       name.toLowerCase().includes(text)
     );
 
-    if (matches.length === 0) {
-      if (suggestionsBox) suggestionsBox.style.display = "none";
+    if (!matches.length) {
+      suggestionsBox.style.display = "none";
       return;
     }
 
-    if (suggestionsBox) suggestionsBox.style.display = "block";
+    suggestionsBox.style.display = "block";
 
     matches.forEach(name => {
       const div = document.createElement("div");
       div.className = "suggestion-item";
       div.textContent = name;
       div.onclick = () => selectGuest(name);
-      if (suggestionsBox) suggestionsBox.appendChild(div);
+      suggestionsBox.appendChild(div);
     });
+  });
+
+  // Allow manual typing
+  searchInput.addEventListener("change", () => {
+    const value = searchInput.value.trim();
+    if (guestGroups[value]) {
+      selectGuest(value);
+    }
   });
 }
 
-// ------------------ SELECT GUEST -------------------
+// =========================
+// SELECT GUEST
+// =========================
 function selectGuest(name) {
-  if (searchInput) searchInput.value = name;
-  if (suggestionsBox) suggestionsBox.style.display = "none";
+  searchInput.value = name;
+  suggestionsBox.style.display = "none";
+
   loadGuestList(name);
 
-  // SHOW RESERVED SEATS COUNT
-  let seats;
-  if (name.includes("&")) {
-    seats = guestGroups[name].length + 1;
-  } else {
-    seats = guestGroups[name].length;
-  }
+  const seats = guestGroups[name].length;
   const reservedEl = document.getElementById("reservedSeatsText");
   if (reservedEl) {
     reservedEl.innerHTML = `We reserved <strong>${seats}</strong> seat(s) for you`;
   }
 
-  // Open the popup after loading the guest list
   openPopup();
 }
 
-// ------------------ LOAD GUEST LIST -------------------
+// =========================
+// LOAD GUEST LIST
+// =========================
 function loadGuestList(name) {
-  if (guestListContainer) guestListContainer.innerHTML = "";
-  if (continueBtn) continueBtn.disabled = true;
+  guestListContainer.innerHTML = "";
+  continueBtn.disabled = true;
 
   let guests = [...guestGroups[name]];
 
-  // ---------- SAFE NAME SPLITTING ----------
+  // Split couples cleanly
   if (name.includes("&")) {
-    let [person1, person2] = name.split("&").map(n => n.trim());
-
-    const lastName1 = person1.split(" ").slice(-1)[0];
-    const lastName2 = person2.split(" ").slice(-1)[0];
-
-    if (lastName1 === lastName2) {
-      const shared = lastName1;
-      if (!person1.split(" ").includes(shared)) {
-        person1 = person1 + " " + shared;
-      }
-      if (!person2.split(" ").includes(shared)) {
-        person2 = person2 + " " + shared;
-      }
-    } else {
-      if (person1.split(" ").length === 1 && person2.split(" ").length >= 2) {
-        person1 = person1 + " " + lastName2;
-      }
-      if (person2.split(" ").length === 1 && person1.split(" ").length >= 2) {
-        person2 = person2 + " " + lastName1;
-      }
-    }
-
-    guests = [person1, person2, ...guests.slice(1)];
+    const parts = name.split("&").map(n => n.trim());
+    guests = [...parts, ...guestGroups[name].slice(1)];
   }
 
-  // ---------- BUILD LIST ----------
   guests.forEach(guest => {
     const row = document.createElement("div");
     row.className = "guest-row";
@@ -386,11 +377,13 @@ function loadGuestList(name) {
       </div>
     `;
 
-    if (guestListContainer) guestListContainer.appendChild(row);
+    guestListContainer.appendChild(row);
   });
 }
 
-// ------------------ ACCEPT / DECLINE LOGIC -------------------
+// =========================
+// ACCEPT / DECLINE
+// =========================
 function acceptGuest(btn) {
   btn.classList.add("selected");
   btn.nextElementSibling.classList.remove("selected");
@@ -403,25 +396,24 @@ function declineGuest(btn) {
   checkAllAnswered();
 }
 
-// ------------------ CHECK ALL ANSWERED -------------------
 function checkAllAnswered() {
-  if (!guestListContainer) return;
   const rows = guestListContainer.querySelectorAll(".guest-row");
-  let allAnswered = true;
+  const allAnswered = [...rows].every(row =>
+    row.querySelector(".accept-btn").classList.contains("selected") ||
+    row.querySelector(".decline-btn").classList.contains("selected")
+  );
 
-  rows.forEach(row => {
-    const acc = row.querySelector(".accept-btn").classList.contains("selected");
-    const dec = row.querySelector(".decline-btn").classList.contains("selected");
-    if (!acc && !dec) allAnswered = false;
-  });
-
-  if (continueBtn) continueBtn.disabled = !allAnswered;
+  continueBtn.disabled = !allAnswered;
 }
 
-// ------------------ CONTINUE BUTTON LOGIC -------------------
+// =========================
+// SUBMIT
+// =========================
 if (continueBtn) {
   continueBtn.addEventListener("click", () => {
-    if (!guestListContainer) return;
+    continueBtn.disabled = true;
+    continueBtn.textContent = "Submitting...";
+
     const rows = guestListContainer.querySelectorAll(".guest-row");
 
     let guests = [];
@@ -433,42 +425,34 @@ if (continueBtn) {
 
       if (accepted) acceptedCount++;
 
-      guests.push({
-        name,
-        accepted
-      });
+      guests.push({ name, accepted });
     });
 
-    const groupName = searchInput ? searchInput.value.trim() : "";
-
     const payload = {
-      groupName,
+      groupName: searchInput.value.trim(),
       seats: acceptedCount,
       guests
     };
 
-   fetch("https://script.google.com/macros/s/AKfycbyiyk_Nz2GWxrQw6r7DKUb6rDtfw-prf9pSpB7uVoMoXEKGEzulkLe6FA6P3XByIy-8Dg/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(payload)
-})
-.then(res => res.json())
-.then(data => {
-  console.log("Success:", data);
-})
-.catch(error => {
-  console.error("Error:", error);
-});
+    fetch("YOUR_WEB_APP_URL_HERE", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(() => {
+      const acceptedGuests = guests
+        .filter(g => g.accepted)
+        .map(g => g.name);
 
-    // Redirect after submit
-   const acceptedGuests = guests.filter(guest => guest.accepted).map(guest => guest.name);
-    const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
-    window.location.href = `confirmation.html?guests=${guestsParam}`;
+      const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
+      window.location.href = `confirmation.html?guests=${guestsParam}`;
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Submission failed. Please try again.");
+      continueBtn.disabled = false;
+      continueBtn.textContent = "Continue";
+    });
   });
 }
-
-
-
-
