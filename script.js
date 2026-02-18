@@ -447,14 +447,20 @@ if (continueBtn) {
       guests
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbxe7E1e8-ppCZleCb0wetfAC60M24W6D1bTPQ0roiQMoUwxAsGGkSHGCWbLmYil__Gi/exec", {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+   fetch("https://script.google.com/macros/s/AKfycbwICK4bNZYnmT-xTrFR_BiGTbiyIlJdYjmsIN5lcjLulquoCRYrpxEp74Rk84Ip_QQA/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+})
+.then(res => res.json())
+.then(data => {
+  console.log(data);
+})
+.catch(err => {
+  console.error(err);
+});
 
     // Redirect after submit
    const acceptedGuests = guests.filter(guest => guest.accepted).map(guest => guest.name);
@@ -462,6 +468,7 @@ if (continueBtn) {
     window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
 
 
 
