@@ -455,11 +455,20 @@ if (continueBtn) {
       body: JSON.stringify(payload)
     });
 
+    .then(res => res.json())
+    .then(data => {
+    console.log("Success:", data);
+
+    const acceptedGuests = guests
+    .filter(g => g.accepted)
+    .map(g => g.name);
+
     // Redirect after submit
    const acceptedGuests = guests.filter(guest => guest.accepted).map(guest => guest.name);
     const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
     window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
 
 
