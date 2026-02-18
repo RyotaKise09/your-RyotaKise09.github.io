@@ -435,27 +435,29 @@ if (continueBtn) {
     };
 
     fetch("https://script.google.com/macros/s/AKfycbwCj_BmGBLnFUqhZREABCmkkZJqqcVwygmXqhVdPxazfaBHUzah8e21fbaEsh_mniI4iQ/exec", {
-      method: "POST",
-      body: JSON.stringify(payload)
-      headers: { "Content-Type": "application/json"
-    })
-    .then(res => res.json())
-    .then(() => {
-      const acceptedGuests = guests
-        .filter(g => g.accepted)
-        .map(g => g.name);
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+})
+.then(res => res.json())
+.then(() => {
+  const acceptedGuests = guests
+    .filter(g => g.accepted)
+    .map(g => g.name);
 
-      const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
-      window.location.href = `confirmation.html?guests=${guestsParam}`;
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("Submission failed. Please try again.");
-      continueBtn.disabled = false;
-      continueBtn.textContent = "Continue";
-    });
-  });
+  const guestsParam = encodeURIComponent(JSON.stringify(acceptedGuests));
+  window.location.href = `confirmation.html?guests=${guestsParam}`;
+})
+.catch(error => {
+  console.error("Error:", error);
+  alert("Submission failed. Please try again.");
+  continueBtn.disabled = false;
+  continueBtn.textContent = "Continue";
+});
 }
+
 
 
 
