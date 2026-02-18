@@ -453,6 +453,13 @@ if (continueBtn) {
     "Content-Type": "application/json"
   },
   body: JSON.stringify(payload)
+})
+.then(res => res.json())
+.then(data => {
+  console.log("Success:", data);
+})
+.catch(error => {
+  console.error("Error:", error);
 });
 
     // Redirect after submit
@@ -461,6 +468,7 @@ if (continueBtn) {
     window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
 
 
 
