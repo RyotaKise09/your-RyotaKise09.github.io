@@ -449,6 +449,7 @@ if (continueBtn) {
 
     fetch("https://script.google.com/macros/s/AKfycbxe7E1e8-ppCZleCb0wetfAC60M24W6D1bTPQ0roiQMoUwxAsGGkSHGCWbLmYil__Gi/exec", {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json"
       },
@@ -461,6 +462,7 @@ if (continueBtn) {
     window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
 
 
 
