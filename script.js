@@ -447,7 +447,7 @@ if (continueBtn) {
       guests
     };
 
-   fetch("https://script.google.com/macros/s/AKfycbyXKbu4FdyT2WfugwATZRB42kRdcR6ufBudcleue6hX88IELRV0Dt6SsXm1qtwmdrfaXQ/exec", {
+   fetch("https://script.google.com/macros/s/AKfycbyiyk_Nz2GWxrQw6r7DKUb6rDtfw-prf9pSpB7uVoMoXEKGEzulkLe6FA6P3XByIy-8Dg/exec", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -468,6 +468,7 @@ if (continueBtn) {
     window.location.href = `confirmation.html?guests=${guestsParam}`;
   });
 }
+
 
 
 
