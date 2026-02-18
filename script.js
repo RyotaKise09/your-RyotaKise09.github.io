@@ -437,6 +437,7 @@ if (continueBtn) {
     fetch("https://script.google.com/macros/s/AKfycbwCj_BmGBLnFUqhZREABCmkkZJqqcVwygmXqhVdPxazfaBHUzah8e21fbaEsh_mniI4iQ/exec", {
       method: "POST",
       body: JSON.stringify(payload)
+      headers: { "Content-Type": "application/json"
     })
     .then(res => res.json())
     .then(() => {
@@ -455,6 +456,7 @@ if (continueBtn) {
     });
   });
 }
+
 
 
 
