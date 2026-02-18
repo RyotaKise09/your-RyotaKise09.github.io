@@ -434,7 +434,7 @@ if (continueBtn) {
       guests
     };
 
-    fetch("YOUR_WEB_APP_URL_HERE", {
+    fetch("https://script.google.com/macros/s/AKfycbxccD3QTUlRVXzFsVDoRFm-iUhChDQex5TzXcLV5CEkr0VNCo-iXGZudBtMU_VwlBBk6w/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -456,3 +456,4 @@ if (continueBtn) {
     });
   });
 }
+
