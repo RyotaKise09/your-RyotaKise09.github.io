@@ -434,7 +434,7 @@ if (continueBtn) {
       guests
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbxccD3QTUlRVXzFsVDoRFm-iUhChDQex5TzXcLV5CEkr0VNCo-iXGZudBtMU_VwlBBk6w/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbwCj_BmGBLnFUqhZREABCmkkZJqqcVwygmXqhVdPxazfaBHUzah8e21fbaEsh_mniI4iQ/exec", {
       method: "POST",
       body: JSON.stringify(payload)
     })
@@ -455,5 +455,6 @@ if (continueBtn) {
     });
   });
 }
+
 
 
